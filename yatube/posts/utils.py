@@ -1,9 +1,11 @@
-from django.core.paginator import Paginator
-from django.conf import settings
+from django.core import paginator
 
 
-def paginator(request, items):
-    paginator = Paginator(items, settings.POSTS_PER_PAGE_LIMIT)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+def pagination(self, posts):
+    page = self.request.GET.get("page")
+    pagination = paginator.Paginator(posts, self.paginate_by)
+    try:
+        page_obj = pagination.page(page)
+    except (paginator.PageNotAnInteger, paginator.EmptyPage):
+        page_obj = pagination.page(1)
     return page_obj

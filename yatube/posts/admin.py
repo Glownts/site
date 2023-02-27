@@ -5,6 +5,7 @@ from django.conf import settings
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+    '''Модель администратора'''
     list_display = (
         'pk',
         'text',

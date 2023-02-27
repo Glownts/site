@@ -12,7 +12,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+    'testserver',
+]
 
 INSTALLED_APPS = [
     'posts.apps.PostsConfig',
@@ -25,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +97,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -99,16 +105,29 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/'  # Подгрузка статики
 
-EMPTY = '-пусто-'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Загрузка медиа
 
-POSTS_PER_PAGE_LIMIT = 10
+MEDIA_URL = '/media/'
 
-LOGIN_URL = 'users:login'
+EMPTY = '-пусто-'  # Значение для пустых полей
 
-LOGIN_REDIRECT_URL = 'posts:index'
+POSTS_PER_PAGE_LIMIT = 10  # Количество записей на одной странице
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+LOGIN_URL = 'users:login'  # Ссылка на логин
 
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+LOGIN_REDIRECT_URL = 'posts:index'  # Редирект после логина
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'  # Подключение эмулятора почтового сервера
+
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')  # Путь для сохранения писем от почтового сервера
+
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'  # Переопределяем вью-функцию для обработки ошибки 403
+
+# Добавляем кэширование
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
